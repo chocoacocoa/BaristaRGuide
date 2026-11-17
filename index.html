@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barista Recipe Guide - 100% Offline</title>
+  <style>
+    /* ==========================================================================
+       PURE OFFLINE CSS SYSTEM - WARM ESPRESSO THEME & FLEXIBLE UTILITIES
+       ========================================================================== */
+    :root {
+      /* Dark Theme Defaults (Warm Coffee & Espresso Palette) */
+      --bg-main: #120d0b;
+      --bg-surface: #1e1613;
+      --bg-card: #261c18;
+      --bg-card-hover: #31241f;
+      --border-color: #3b2a24;
+      --border-accent: #6d4233;
+      
+      --text-primary: #f3ece7;
+      --text-secondary: #c4b0a4;
+      --text-muted: #8c786c;
+      
+      --accent: #e07a5f;
+      --accent-hover: #f28a6f;
+      --accent-bg: rgba(224, 122, 95, 0.15);
+      
+      --tag-hot-bg: #4a2118;
+      --tag-hot-text: #ff9d85;
+      --tag-iced-bg: #1c3b4a;
+      --tag-iced-text: #82d4f7;
+      --tag-blended-bg: #3d2a4e;
+      --tag-blended-text: #d8b4fe;
+
+      --badge-code-bg: #33231a;
+      --badge-code-text: #f4a261;
+
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+
+      --transition-speed: 0.2s;
+    }
+
+    /* Light Theme Toggle Overrides */
+    [data-theme="light"] {
+      --bg-main: #f8f5f2;
+      --bg-surface: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f3ede7;
+      --border-color: #e5dcd3;
+      --border-accent: #d0bfae;
+      
+      --text-primary: #2b1e18;
+      --text-secondary: #635147;
+      --text-muted: #8d7a70;
+      
+      --accent: #d96b43;
+      --accent-hover: #c25932;
+      --accent-bg: rgba(217, 107, 67, 0.12);
+      
+      --tag-hot-bg: #ffebe6;
+      --tag-hot-text: #c0392b;
+      --tag-iced-bg: #e6f7ff;
+      --tag-iced-text: #0077b6;
+      --tag-blended-bg: #f3e8ff;
+      --tag-blended-text: #7e22ce;
+
+      --badge-code-bg: #f4ece4;
+      --badge-code-text: #b85d19;
+
+      --shadow: 0 4px 16px rgba(50, 30, 20, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+    }
+
+    /* SVG Icon Sizing */
+    .icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      fill: currentColor;
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    /* App Header */
+    header {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .header-top {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-icon {
+      background: var(--accent);
+      color: #fff;
+      padding: 0.5rem;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .theme-toggle-btn {
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.5rem 0.85rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: all var(--transition-speed);
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Search & Barista Quick Controls */
+    .controls-bar {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.75rem 1.25rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .search-box input {
+      width: 100%;
+      background-color: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition-speed);
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+    }
+
+    .search-icon-inside {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .clear-search-btn {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      display: none;
+    }
+
+    .clear-search-btn.active {
+      display: block;
+    }
+
+    /* Batch Multiplier Controls */
+    .batch-control {
+      display: flex;
+      align-items: center;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.25rem;
+      gap: 0.25rem;
+    }
+
+    .batch-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 0 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .batch-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-weight: 700;
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all var(--transition-speed);
+    }
+
+    .batch-btn.active {
+      background-color: var(--accent);
+      color: #ffffff;
+    }
+
+    /* Horizontally Scrollable Category Nav Bar */
+    .category-nav-wrapper {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-accent) transparent;
+    }
+
+    .category-nav-wrapper::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .category-nav-wrapper::-webkit-scrollbar-thumb {
+      background-color: var(--border-accent);
+      border-radius: 4px;
+    }
+
+    .category-nav {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.5rem 1.25rem;
+      white-space: nowrap;
+    }
+
+    .cat-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+      transition: all var(--transition-speed);
+    }
+
+    .cat-btn:hover {
+      background: var(--bg-main);
+      color: var(--text-primary);
+    }
+
+    .cat-btn.active {
+      background: var(--accent-bg);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .cat-badge {
+      background: var(--bg-main);
+      color: var(--text-muted);
+      padding: 0.1rem 0.4rem;
+      border-radius: 10px;
+      font-size: 0.75rem;
+    }
+
+    .cat-btn.active .cat-badge {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* Main Container & Grid */
+    main {
+      flex: 1;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .recipe-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .recipe-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .recipe-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .recipe-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    /* Recipe Card Styling */
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+      position: relative;
+      transition: transform var(--transition-speed), border-color var(--transition-speed), background-color var(--transition-speed);
+    }
+
+    .card:hover {
+      border-color: var(--border-accent);
+      background-color: var(--bg-card-hover);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+      gap: 0.5rem;
+    }
+
+    .drink-title-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drink-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    .drink-code-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--badge-code-bg);
+      color: var(--badge-code-text);
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--radius-sm);
+      margin-top: 0.25rem;
+      letter-spacing: 0.05em;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .pin-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.35rem;
+      border-radius: 50%;
+      transition: color var(--transition-speed);
+    }
+
+    .pin-btn:hover, .pin-btn.pinned {
+      color: #f59e0b;
+    }
+
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .tag-hot {
+      background-color: var(--tag-hot-bg);
+      color: var(--tag-hot-text);
+    }
+
+    .tag-iced {
+      background-color: var(--tag-iced-bg);
+      color: var(--tag-iced-text);
+    }
+
+    .tag-blended {
+      background-color: var(--tag-blended-bg);
+      color: var(--tag-blended-text);
+    }
+
+    /* Size Selector Switcher inside card */
+    .size-selector {
+      display: flex;
+      background-color: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 0.2rem;
+      gap: 0.2rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+    }
+
+    .size-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 0.25rem;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: center;
+      white-space: nowrap;
+      transition: all var(--transition-speed);
+    }
+
+    .size-btn.active {
+      background-color: var(--accent);
+      color: #ffffff;
+    }
+
+    /* Ingredients List */
+    .ingredients-box {
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem;
+      margin-bottom: 0.75rem;
+      flex: 1;
+    }
+
+    .ingredients-list {
+      list-style: none;
+      font-size: 0.875rem;
+    }
+
+    .ingredients-list li {
+      padding: 0.25rem 0;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .ingredients-list li:last-child {
+      border-bottom: none;
+    }
+
+    .ing-name {
+      color: var(--text-secondary);
+    }
+
+    .ing-val {
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .notes-box {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+      background: rgba(0,0,0,0.1);
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--accent);
+    }
+
+    /* Offline Banner / Status */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      grid-column: 1 / -1;
+    }
+
+    .empty-state svg {
+      width: 3rem;
+      height: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    /* Toast Notification for offline interactions */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--accent);
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transform: translateY(150%);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER & NAVBAR -->
+  <header>
+    <div class="header-top">
+      <a href="#" class="brand">
+        <span class="brand-icon">
+          <!-- Inline Coffee Cup SVG Icon -->
+          <svg class="icon" viewBox="0 0 24 24"><path d="M2,21V19H20V21H2M20,8V5D18.34,5 17,6.34 17,8V13D17,14.66 18.34,16 20,16H21A2,2 0 0,0 23,14V10A2,2 0 0,0 21,8H20M4,19V5H15V19H4Z"/></svg>
+        </span>
+        <span>Barista Recipe Guide</span>
+      </a>
+
+      <div class="header-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle Light/Dark Theme">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z"/></svg>
+          <span id="themeLabel">Dark</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- SEARCH & CONTROLS -->
+    <div class="controls-bar">
+      <div class="search-box">
+        <svg class="icon search-icon-inside" viewBox="0 0 24 24"><path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"/></svg>
+        <input type="text" id="searchInput" placeholder="Search by name or code (e.g., AMB, SML, Matcha, Latte)..." autocomplete="off">
+        <button id="clearSearchBtn" class="clear-search-btn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/></svg>
+        </button>
+      </div>
+
+      <!-- BATCH MULTIPLIER FOR RUSH HOURS -->
+      <div class="batch-control">
+        <span class="batch-label">Batch:</span>
+        <button class="batch-btn active" data-multiplier="1">x1</button>
+        <button class="batch-btn" data-multiplier="2">x2</button>
+        <button class="batch-btn" data-multiplier="3">x3</button>
+        <button class="batch-btn" data-multiplier="4">x4</button>
+      </div>
+    </div>
+
+    <!-- HORIZONTAL CATEGORY NAVIGATION BAR -->
+    <div class="category-nav-wrapper">
+      <nav class="category-nav" id="categoryNav">
+        <!-- Generated Dynamically via JS -->
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT AREA -->
+  <main>
+    <div id="gridHeader" class="section-title">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"/></svg>
+      <span id="activeCategoryTitle">All Recipes</span>
+    </div>
+
+    <div class="recipe-grid" id="recipeGrid">
+      <!-- Recipe Cards populated dynamically -->
+    </div>
+  </main>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>
+    <span id="toastMsg">Action completed</span>
+  </div>
+
+  <footer>
+    <p>100% Offline Barista Recipe Reference Guide — Works without Internet Connection</p>
+  </footer>
+
+  <!-- EMBEDDED COMPLETE DATA & APPLICATION LOGIC -->
+  <script>
+    /* ==========================================================================
+       COMPLETE BARISTA RECIPE DATASET (PURE OFFLINE JSON)
+       ========================================================================== */
+    const RECIPE_DATA = [
+      // 1. ESPRESSO SERIES
+      {
+        id: "amb",
+        code: "AMB",
+        name: "Americano",
+        category: "Espresso Series",
+        tags: ["Hot", "Iced"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Hot Water", qty: 220, unit: "ml" }] },
+          { name: "16oz Hot", items: [{ ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Hot Water", qty: 280, unit: "ml" }] },
+          { name: "16oz Iced", items: [{ ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Water", qty: 180, unit: "ml" }, { ing: "Ice", qty: "Full Cup", isText: true }] },
+          { name: "22oz Iced", items: [{ ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Water", qty: 200, unit: "ml" }, { ing: "Ice", qty: "Full Cup", isText: true }] }
+        ],
+        note: "Optional: Sugar Syrup up to 20g upon request."
+      },
+      {
+        id: "aer",
+        code: "AER",
+        name: "Aerocano",
+        category: "Espresso Series",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Ice in Pitcher", qty: "3/4 Cup", isText: true }] },
+          { name: "22oz Iced", items: [{ ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Ice in Pitcher", qty: "3/4 Cup", isText: true }] }
+        ],
+        note: "Induce air using steaming wand until rich foam layer forms."
+      },
+      {
+        id: "ssh",
+        code: "SSH",
+        name: "Sunrise Shot",
+        category: "Espresso Series",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Orange Juice", qty: 180, unit: "ml" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 16, unit: "g" }] },
+          { name: "22oz Iced", items: [{ ing: "Orange Juice", qty: 200, unit: "ml" }, { ing: "Sugar Syrup", qty: 15, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 18, unit: "g" }] }
+        ],
+        note: "Top with 1 sliced dehydrated orange."
+      },
+      {
+        id: "mpe",
+        code: "MPE",
+        name: "Maple Espresso",
+        category: "Espresso Series",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Maple Syrup", qty: 25, unit: "ml" }, { ing: "Roasted Almond Syrup", qty: 20, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Oat Milk", qty: 60, unit: "ml" }] },
+          { name: "22oz Iced", items: [{ ing: "Maple Syrup", qty: 30, unit: "ml" }, { ing: "Roasted Almond Syrup", qty: 25, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Oat Milk", qty: 90, unit: "ml" }] }
+        ],
+        note: "Layer carefully for smooth flavor separation."
+      },
+      {
+        id: "cal",
+        code: "CAL",
+        name: "Cafe Latte",
+        category: "Espresso Series",
+        tags: ["Hot", "Iced"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Steamed Milk", qty: 200, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 16, unit: "g" }] },
+          { name: "16oz Hot", items: [{ ing: "Steamed Milk", qty: 230, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 18, unit: "g" }] },
+          { name: "16oz Iced", items: [{ ing: "Cold Milk", qty: 180, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 16, unit: "g" }] },
+          { name: "22oz Iced", items: [{ ing: "Cold Milk", qty: 200, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 18, unit: "g" }] }
+        ]
+      },
+      {
+        id: "cap",
+        code: "CAP",
+        name: "Cappuccino",
+        category: "Espresso Series",
+        tags: ["Hot", "Iced"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Thick Foam Milk", qty: 200, unit: "ml" }] },
+          { name: "16oz Hot", items: [{ ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Thick Foam Milk", qty: 230, unit: "ml" }] },
+          { name: "16oz Iced", items: [{ ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Thick Foam Milk", qty: 180, unit: "ml" }] },
+          { name: "22oz Iced", items: [{ ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Thick Foam Milk", qty: 200, unit: "ml" }] }
+        ],
+        note: "Top with cinnamon powder, coffee grounds, or cacao powder."
+      },
+      {
+        id: "spl",
+        code: "SPL",
+        name: "Spanish Latte",
+        category: "Espresso Series",
+        tags: ["Hot", "Iced"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Condensed Milk", qty: 30, unit: "ml" }, { ing: "Sugar Syrup", qty: 5, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Milk", qty: 200, unit: "ml" }] },
+          { name: "16oz Hot", items: [{ ing: "Condensed Milk", qty: 45, unit: "ml" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Milk", qty: 230, unit: "ml" }] },
+          { name: "16oz Iced", items: [{ ing: "Condensed Milk", qty: 45, unit: "ml" }, { ing: "Sugar Syrup", qty: 5, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Milk", qty: 60, unit: "ml" }] },
+          { name: "22oz Iced", items: [{ ing: "Condensed Milk", qty: 65, unit: "ml" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Milk", qty: 90, unit: "ml" }] }
+        ]
+      },
+      {
+        id: "vtc",
+        code: "VTC",
+        name: "Vietnamese Coffee",
+        category: "Espresso Series",
+        tags: ["Hot", "Iced"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Condensed Milk", qty: 40, unit: "ml" }, { ing: "Sugar Syrup", qty: 5, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Hot Water", qty: 200, unit: "ml" }] },
+          { name: "16oz Hot", items: [{ ing: "Condensed Milk", qty: 60, unit: "ml" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Hot Water", qty: 230, unit: "ml" }] },
+          { name: "16oz Iced", items: [{ ing: "Condensed Milk", qty: 45, unit: "ml" }, { ing: "Sugar Syrup", qty: 5, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Water", qty: 180, unit: "ml" }] },
+          { name: "22oz Iced", items: [{ ing: "Condensed Milk", qty: 65, unit: "ml" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Water", qty: 200, unit: "ml" }] }
+        ]
+      },
+      {
+        id: "crm",
+        code: "CRM",
+        name: "Caramel Macchiato",
+        category: "Espresso Series",
+        tags: ["Hot", "Iced"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Sugar Syrup", qty: 5, unit: "ml" }, { ing: "Caramel Syrup", qty: 5, unit: "ml" }, { ing: "Milk", qty: 200, unit: "ml" }, { ing: "Caramel Sauce Sidings", qty: 10, unit: "ml" }] },
+          { name: "16oz Hot", items: [{ ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Caramel Syrup", qty: 10, unit: "ml" }, { ing: "Milk", qty: 230, unit: "ml" }, { ing: "Caramel Sauce Sidings", qty: 15, unit: "ml" }] },
+          { name: "16oz Iced", items: [{ ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Caramel Syrup", qty: 15, unit: "ml" }, { ing: "Milk", qty: 180, unit: "ml" }, { ing: "Caramel Sauce Sidings", qty: 10, unit: "ml" }] },
+          { name: "22oz Iced", items: [{ ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Sugar Syrup", qty: 15, unit: "ml" }, { ing: "Caramel Syrup", qty: 20, unit: "ml" }, { ing: "Milk", qty: 200, unit: "ml" }, { ing: "Caramel Sauce Sidings", qty: 15, unit: "ml" }] }
+        ]
+      },
+      {
+        id: "scm",
+        code: "SCM",
+        name: "Salted Caramel Macchiato",
+        category: "Espresso Series",
+        tags: ["Hot", "Iced"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "CRM Base Recipe", qty: "12oz Std", isText: true }, { ing: "Himalayan Salt", qty: 5, unit: "g" }] },
+          { name: "16oz Hot", items: [{ ing: "CRM Base Recipe", qty: "16oz Std", isText: true }, { ing: "Himalayan Salt", qty: 8, unit: "g" }] },
+          { name: "16oz Iced", items: [{ ing: "CRM Base Recipe", qty: "16oz Std", isText: true }, { ing: "Himalayan Salt", qty: 8, unit: "g" }] },
+          { name: "22oz Iced", items: [{ ing: "CRM Base Recipe", qty: "22oz Std", isText: true }, { ing: "Himalayan Salt", qty: 10, unit: "g" }] }
+        ],
+        note: "Finish with a delicate drizzle of Himalayan salt topping."
+      },
+      {
+        id: "mcc",
+        code: "MCC",
+        name: "Mochaccino",
+        category: "Espresso Series",
+        tags: ["Hot", "Iced"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Chocolate Sauce", qty: 20, unit: "ml" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Milk", qty: 200, unit: "ml" }] },
+          { name: "16oz Hot", items: [{ ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Chocolate Sauce", qty: 35, unit: "ml" }, { ing: "Sugar Syrup", qty: 15, unit: "ml" }, { ing: "Milk", qty: 230, unit: "ml" }] },
+          { name: "16oz Iced", items: [{ ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Chocolate Sauce", qty: 45, unit: "ml" }, { ing: "Sugar Syrup", qty: 15, unit: "ml" }, { ing: "Milk", qty: 180, unit: "ml" }] },
+          { name: "22oz Iced", items: [{ ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Chocolate Sauce", qty: 55, unit: "ml" }, { ing: "Sugar Syrup", qty: 20, unit: "ml" }, { ing: "Milk", qty: 200, unit: "ml" }] }
+        ]
+      },
+      {
+        id: "wcm",
+        code: "WCM",
+        name: "White Chocolate Mocha",
+        category: "Espresso Series",
+        tags: ["Hot", "Iced"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Sugar Syrup", qty: 5, unit: "ml" }, { ing: "Milk", qty: 200, unit: "ml" }, { ing: "White Chocolate Sauce", qty: 20, unit: "ml" }] },
+          { name: "16oz Hot", items: [{ ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Sugar Syrup", qty: 5, unit: "ml" }, { ing: "Milk", qty: 230, unit: "ml" }, { ing: "White Chocolate Sauce", qty: 30, unit: "ml" }] },
+          { name: "16oz Iced", items: [{ ing: "Espresso Ground Coffee", qty: 16, unit: "g" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Milk", qty: 180, unit: "ml" }, { ing: "White Chocolate Sauce", qty: 25, unit: "ml" }] },
+          { name: "22oz Iced", items: [{ ing: "Espresso Ground Coffee", qty: 18, unit: "g" }, { ing: "Sugar Syrup", qty: 15, unit: "ml" }, { ing: "Milk", qty: 200, unit: "ml" }, { ing: "White Chocolate Sauce", qty: 35, unit: "ml" }] }
+        ],
+        note: "Top with white chocolate chips."
+      },
+      {
+        id: "bsl",
+        code: "BSL",
+        name: "Biscoff Seasalt Latte",
+        category: "Espresso Series",
+        tags: ["Hot", "Iced"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Biscoff Spread", qty: 10, unit: "g" }, { ing: "BSL Syrup", qty: 5, unit: "ml" }, { ing: "Sugar Syrup", qty: 5, unit: "ml" }, { ing: "Milk", qty: 200, unit: "ml" }, { ing: "BSL Toppings", qty: 5, unit: "g" }] },
+          { name: "16oz Hot", items: [{ ing: "Biscoff Spread", qty: 15, unit: "g" }, { ing: "BSL Syrup", qty: 10, unit: "ml" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Milk", qty: 230, unit: "ml" }, { ing: "BSL Toppings", qty: 10, unit: "g" }] },
+          { name: "16oz Iced", items: [{ ing: "Biscoff Spread", qty: 15, unit: "g" }, { ing: "BSL Syrup", qty: 10, unit: "ml" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Milk", qty: 180, unit: "ml" }, { ing: "BSL Toppings", qty: 10, unit: "g" }] },
+          { name: "22oz Iced", items: [{ ing: "Biscoff Spread", qty: 20, unit: "g" }, { ing: "BSL Syrup", qty: 15, unit: "ml" }, { ing: "Sugar Syrup", qty: 15, unit: "ml" }, { ing: "Milk", qty: 200, unit: "ml" }, { ing: "BSL Toppings", qty: 15, unit: "g" }] }
+        ]
+      },
+      {
+        id: "flv",
+        code: "FLV",
+        name: "Flavored Latte",
+        category: "Espresso Series",
+        tags: ["Hot", "Iced"],
+        variants: "RAL, ETL, ICL, HNL, MNL, BTL",
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Milk", qty: 200, unit: "ml" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Flavor Syrup", qty: 10, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 16, unit: "g" }] },
+          { name: "16oz Hot", items: [{ ing: "Milk", qty: 230, unit: "ml" }, { ing: "Sugar Syrup", qty: 15, unit: "ml" }, { ing: "Flavor Syrup", qty: 20, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 18, unit: "g" }] },
+          { name: "16oz Iced", items: [{ ing: "Milk", qty: 180, unit: "ml" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Flavor Syrup", qty: 15, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 16, unit: "g" }] },
+          { name: "22oz Iced", items: [{ ing: "Milk", qty: 200, unit: "ml" }, { ing: "Sugar Syrup", qty: 20, unit: "ml" }, { ing: "Flavor Syrup", qty: 25, unit: "ml" }, { ing: "Espresso Ground Coffee", qty: 18, unit: "g" }] }
+        ],
+        note: "Flavors: Roasted Almond (RAL), English Toffee (ETL), Irish Cream (ICL), Hazelnut (HNL), Macadamia (MNL), Butterscotch (BTL)."
+      },
+      {
+        id: "ssl",
+        code: "SSL",
+        name: "Sea Salt Latte",
+        category: "Espresso Series",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Condensed Milk", qty: 60, unit: "ml" }, { ing: "Sugar Syrup", qty: 5, unit: "ml" }, { ing: "Milk", qty: 180, unit: "ml" }, { ing: "Espresso Coffee", qty: 16, unit: "g" }, { ing: "Cold Foam (Whipping/Milk/Sugar/Salt)", qty: "15ml / 20ml / 5ml / 8g", isText: true }] },
+          { name: "22oz Iced", items: [{ ing: "Condensed Milk", qty: 80, unit: "ml" }, { ing: "Sugar Syrup", qty: 10, unit: "ml" }, { ing: "Milk", qty: 200, unit: "ml" }, { ing: "Espresso Coffee", qty: 18, unit: "g" }, { ing: "Cold Foam (Whipping/Milk/Sugar/Salt)", qty: "20ml / 30ml / 5ml / 1g", isText: true }] }
+        ]
+      },
+
+      // 2. MATCHA & STRAWBERRY
+      {
+        id: "mtl",
+        code: "MTL",
+        name: "Matcha Latte",
+        category: "Matcha & Strawberry",
+        tags: ["Hot", "Iced"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Creamer", qty: 30, unit: "g" }, { ing: "Matcha Powder", qty: 40, unit: "g" }, { ing: "Condensed Milk", qty: 25, unit: "g" }, { ing: "Hot Water", qty: 230, unit: "ml" }] },
+          { name: "16oz Hot", items: [{ ing: "Creamer", qty: 30, unit: "g" }, { ing: "Matcha Powder", qty: 50, unit: "g" }, { ing: "Condensed Milk", qty: 40, unit: "g" }, { ing: "Hot Water", qty: 300, unit: "ml" }] },
+          { name: "16oz Iced", items: [{ ing: "Creamer", qty: 30, unit: "g" }, { ing: "Matcha Powder", qty: 40, unit: "g" }, { ing: "Condensed Milk", qty: 30, unit: "g" }, { ing: "Fructose", qty: 5, unit: "g" }, { ing: "Water", qty: 180, unit: "ml" }] },
+          { name: "22oz Iced", items: [{ ing: "Creamer", qty: 30, unit: "g" }, { ing: "Matcha Powder", qty: 55, unit: "g" }, { ing: "Condensed Milk", qty: 35, unit: "g" }, { ing: "Fructose", qty: 10, unit: "g" }, { ing: "Water", qty: 200, unit: "ml" }] }
+        ]
+      },
+      {
+        id: "sml",
+        code: "SML",
+        name: "Strawberry Matcha Latte",
+        category: "Matcha & Strawberry",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Creamer", qty: 30, unit: "g" }, { ing: "Matcha Powder", qty: 40, unit: "g" }, { ing: "Condensed Milk", qty: 30, unit: "g" }, { ing: "Strawberry Syrup", qty: 10, unit: "g" }, { ing: "Fructose", qty: 5, unit: "g" }, { ing: "Water", qty: 180, unit: "ml" }, { ing: "Strawberry Jam Sidings", qty: 20, unit: "g" }] },
+          { name: "22oz Iced", items: [{ ing: "Creamer", qty: 30, unit: "g" }, { ing: "Matcha Powder", qty: 55, unit: "g" }, { ing: "Condensed Milk", qty: 35, unit: "g" }, { ing: "Strawberry Syrup", qty: 15, unit: "g" }, { ing: "Fructose", qty: 10, unit: "g" }, { ing: "Water", qty: 200, unit: "ml" }, { ing: "Strawberry Jam Sidings", qty: 30, unit: "g" }] }
+        ]
+      },
+      {
+        id: "stm",
+        code: "STM",
+        name: "Stained Matcha",
+        category: "Matcha & Strawberry",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Creamer", qty: 30, unit: "g" }, { ing: "Matcha Powder", qty: 40, unit: "g" }, { ing: "Condensed Milk", qty: 30, unit: "g" }, { ing: "Fructose", qty: 5, unit: "g" }, { ing: "Water", qty: 180, unit: "ml" }, { ing: "Espresso Top Shot", qty: 16, unit: "g" }] },
+          { name: "22oz Iced", items: [{ ing: "Creamer", qty: 30, unit: "g" }, { ing: "Matcha Powder", qty: 55, unit: "g" }, { ing: "Condensed Milk", qty: 35, unit: "g" }, { ing: "Fructose", qty: 10, unit: "g" }, { ing: "Water", qty: 200, unit: "ml" }, { ing: "Espresso Top Shot", qty: 18, unit: "g" }] }
+        ]
+      },
+      {
+        id: "stl",
+        code: "STL",
+        name: "Strawberry Latte",
+        category: "Matcha & Strawberry",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Creamer", qty: 30, unit: "g" }, { ing: "FC Milk Powder", qty: 20, unit: "g" }, { ing: "Strawberry Syrup", qty: 10, unit: "g" }, { ing: "Fructose", qty: 10, unit: "g" }, { ing: "Full Cream Milk", qty: 120, unit: "ml" }, { ing: "Water", qty: 60, unit: "ml" }, { ing: "Strawberry Jam Sidings", qty: 20, unit: "g" }] },
+          { name: "22oz Iced", items: [{ ing: "Creamer", qty: 30, unit: "g" }, { ing: "FC Milk Powder", qty: 25, unit: "g" }, { ing: "Strawberry Syrup", qty: 15, unit: "g" }, { ing: "Fructose", qty: 15, unit: "g" }, { ing: "Full Cream Milk", qty: 150, unit: "ml" }, { ing: "Water", qty: 80, unit: "ml" }, { ing: "Strawberry Jam Sidings", qty: 30, unit: "g" }] }
+        ]
+      },
+
+      // 3. TEA & YAMANG BUKID
+      {
+        id: "tlt",
+        code: "TLT",
+        name: "Turmeric Lemon Tea",
+        category: "Tea & Yamang Bukid",
+        tags: ["Hot", "Iced"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Turmeric Powder", qty: 15, unit: "g" }, { ing: "Lemon Syrup", qty: 5, unit: "g" }, { ing: "Sugar Syrup", qty: 5, unit: "g" }, { ing: "Hot Water", qty: 230, unit: "ml" }] },
+          { name: "16oz Hot", items: [{ ing: "Turmeric Powder", qty: 20, unit: "g" }, { ing: "Lemon Syrup", qty: 10, unit: "g" }, { ing: "Sugar Syrup", qty: 10, unit: "g" }, { ing: "Hot Water", qty: 300, unit: "ml" }] },
+          { name: "16oz Iced", items: [{ ing: "Turmeric Powder", qty: 20, unit: "g" }, { ing: "Lemon Syrup", qty: 10, unit: "g" }, { ing: "Sugar Syrup", qty: 5, unit: "g" }, { ing: "Water", qty: 180, unit: "ml" }, { ing: "Dried Lemon", qty: "1 pc", isText: true }] },
+          { name: "22oz Iced", items: [{ ing: "Turmeric Powder", qty: 25, unit: "g" }, { ing: "Lemon Syrup", qty: 15, unit: "g" }, { ing: "Sugar Syrup", qty: 10, unit: "g" }, { ing: "Water", qty: 200, unit: "ml" }, { ing: "Dried Lemon", qty: "1 pc", isText: true }] }
+        ]
+      },
+      {
+        id: "pbt",
+        code: "PBT",
+        name: "Passion Fruit Black Tea",
+        category: "Tea & Yamang Bukid",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Black Tea Base", qty: 80, unit: "ml" }, { ing: "Passion Fruit Syrup", qty: 30, unit: "g" }, { ing: "Water", qty: 100, unit: "ml" }, { ing: "Passion Fruit Jam", qty: 40, unit: "g" }, { ing: "Garnish", qty: "1 Dried Lemon + 1 Dried Orange", isText: true }] },
+          { name: "22oz Iced", items: [{ ing: "Black Tea Base", qty: 90, unit: "ml" }, { ing: "Passion Fruit Syrup", qty: 40, unit: "g" }, { ing: "Water", qty: 110, unit: "ml" }, { ing: "Passion Fruit Jam", qty: 50, unit: "g" }, { ing: "Garnish", qty: "1 Dried Lemon + 1 Dried Orange", isText: true }] }
+        ]
+      },
+      {
+        id: "wlt",
+        code: "WLT",
+        name: "WinterLemon Tea",
+        category: "Tea & Yamang Bukid",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Green Tea Base", qty: 80, unit: "ml" }, { ing: "Wintermelon Syrup", qty: 20, unit: "g" }, { ing: "Lemon Syrup", qty: 6, unit: "g" }, { ing: "Sugar Syrup", qty: 20, unit: "g" }, { ing: "Water", qty: 100, unit: "ml" }, { ing: "Dried Lemon", qty: "1 pc", isText: true }] },
+          { name: "22oz Iced", items: [{ ing: "Green Tea Base", qty: 100, unit: "ml" }, { ing: "Wintermelon Syrup", qty: 25, unit: "g" }, { ing: "Lemon Syrup", qty: 15, unit: "g" }, { ing: "Sugar Syrup", qty: 25, unit: "g" }, { ing: "Water", qty: 100, unit: "ml" }, { ing: "Dried Lemon", qty: "1 pc", isText: true }] }
+        ]
+      },
+
+      // 4. FRAPPE / FROST (WITH COFFEE)
+      {
+        id: "cjf",
+        code: "CJF",
+        name: "Coffee Jelly Frappe",
+        category: "Frappe / Frost (Coffee)",
+        tags: ["Blended"],
+        sizes: [
+          { name: "16oz Blended", items: [{ ing: "Espresso / Coffee Paste", qty: "30ml / 3g", isText: true }, { ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "Fructose", qty: 40, unit: "ml" }, { ing: "Coffee Jelly Sinker", qty: 20, unit: "g" }, { ing: "Coffee Jelly Toppings", qty: 10, unit: "g" }, { ing: "Ice", qty: 250, unit: "g" }] },
+          { name: "22oz Blended", items: [{ ing: "Espresso / Coffee Paste", qty: "45ml / 6g", isText: true }, { ing: "Creamer Powder", qty: 40, unit: "g" }, { ing: "Fructose", qty: 45, unit: "ml" }, { ing: "Coffee Jelly Sinker", qty: 30, unit: "g" }, { ing: "Coffee Jelly Toppings", qty: 10, unit: "g" }, { ing: "Ice", qty: 300, unit: "g" }] }
+        ],
+        note: "Top with whipped cream & coffee jelly."
+      },
+      {
+        id: "mcf",
+        code: "MCF",
+        name: "Mocha Frappe",
+        category: "Frappe / Frost (Coffee)",
+        tags: ["Blended"],
+        sizes: [
+          { name: "16oz Blended", items: [{ ing: "Espresso / Coffee Paste", qty: "30ml / 3g", isText: true }, { ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "Cacao Powder", qty: 20, unit: "g" }, { ing: "Fructose", qty: 40, unit: "ml" }, { ing: "Ice", qty: 250, unit: "g" }] },
+          { name: "22oz Blended", items: [{ ing: "Espresso / Coffee Paste", qty: "45ml / 6g", isText: true }, { ing: "Creamer Powder", qty: 40, unit: "g" }, { ing: "Cacao Powder", qty: 25, unit: "g" }, { ing: "Fructose", qty: 45, unit: "ml" }, { ing: "Ice", qty: 300, unit: "g" }] }
+        ],
+        note: "Top with whipped cream & chocolate sauce."
+      },
+      {
+        id: "jcf",
+        code: "JCF",
+        name: "Java Chip Frappe",
+        category: "Frappe / Frost (Coffee)",
+        tags: ["Blended"],
+        sizes: [
+          { name: "16oz Blended", items: [{ ing: "Espresso / Coffee Paste", qty: "30ml / 3g", isText: true }, { ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "Cacao Powder", qty: 20, unit: "g" }, { ing: "Fructose", qty: 40, unit: "ml" }, { ing: "Chocolate Chip (Blended)", qty: 15, unit: "g" }, { ing: "Ice", qty: 250, unit: "g" }] },
+          { name: "22oz Blended", items: [{ ing: "Espresso / Coffee Paste", qty: "45ml / 6g", isText: true }, { ing: "Creamer Powder", qty: 40, unit: "g" }, { ing: "Cacao Powder", qty: 25, unit: "g" }, { ing: "Fructose", qty: 45, unit: "ml" }, { ing: "Chocolate Chip (Blended)", qty: 200, unit: "g" }, { ing: "Ice", qty: 300, unit: "g" }] }
+        ],
+        note: "Sidings: chocolate sauce. Top: whipped cream & chocolate chips."
+      },
+      {
+        id: "jrf",
+        code: "JRF",
+        name: "Java Rhuma Frappe",
+        category: "Frappe / Frost (Coffee)",
+        tags: ["Blended"],
+        sizes: [
+          { name: "16oz Blended", items: [{ ing: "Espresso / Coffee Paste", qty: "30ml / 3g", isText: true }, { ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "Cacao Powder", qty: 20, unit: "g" }, { ing: "Fructose", qty: 40, unit: "ml" }, { ing: "Chocolate Chips", qty: 15, unit: "g" }, { ing: "Sagada Coffee Beans", qty: 5, unit: "g" }, { ing: "Ice", qty: 250, unit: "g" }] },
+          { name: "22oz Blended", items: [{ ing: "Espresso / Coffee Paste", qty: "45ml / 6g", isText: true }, { ing: "Creamer Powder", qty: 40, unit: "g" }, { ing: "Cacao Powder", qty: 25, unit: "g" }, { ing: "Fructose", qty: 45, unit: "ml" }, { ing: "Chocolate Chips", qty: 20, unit: "g" }, { ing: "Sagada Coffee Beans", qty: 8, unit: "g" }, { ing: "Ice", qty: 300, unit: "g" }] }
+        ],
+        note: "Sidings: chocolate sauce. Top: whipped cream, coffee grounds & chocolate chips."
+      },
+
+      // 5. FRAPPE / FROST (NON-COFFEE)
+      {
+        id: "chf",
+        code: "CHF",
+        name: "Chocolate Frost",
+        category: "Frappe / Frost (Non-Coffee)",
+        tags: ["Blended"],
+        sizes: [
+          { name: "16oz Blended", items: [{ ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "Cacao Powder", qty: 25, unit: "g" }, { ing: "Fructose", qty: 30, unit: "g" }, { ing: "Water", qty: 45, unit: "ml" }, { ing: "Ice", qty: 250, unit: "g" }] },
+          { name: "22oz Blended", items: [{ ing: "Creamer Powder", qty: 40, unit: "g" }, { ing: "Cacao Powder", qty: 30, unit: "g" }, { ing: "Fructose", qty: 45, unit: "g" }, { ing: "Water", qty: 45, unit: "ml" }, { ing: "Ice", qty: 300, unit: "g" }] }
+        ]
+      },
+      {
+        id: "mtf",
+        code: "MTF",
+        name: "Matcha Frappe",
+        category: "Frappe / Frost (Non-Coffee)",
+        tags: ["Blended"],
+        sizes: [
+          { name: "16oz Blended", items: [{ ing: "Matcha Powder", qty: 50, unit: "g" }, { ing: "Condensed Milk", qty: 25, unit: "ml" }, { ing: "Fructose", qty: 25, unit: "ml" }, { ing: "Ice", qty: 250, unit: "g" }] },
+          { name: "22oz Blended", items: [{ ing: "Matcha Powder", qty: 70, unit: "g" }, { ing: "Condensed Milk", qty: 30, unit: "ml" }, { ing: "Fructose", qty: 30, unit: "ml" }, { ing: "Ice", qty: 300, unit: "g" }] }
+        ],
+        note: "Top with whipped cream & matcha powder."
+      },
+      {
+        id: "ccf",
+        code: "CCF",
+        name: "Cookies and Cream",
+        category: "Frappe / Frost (Non-Coffee)",
+        tags: ["Blended"],
+        sizes: [
+          { name: "16oz Blended", items: [{ ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "FC Milk Powder", qty: 20, unit: "g" }, { ing: "Blended Oreos", qty: 25, unit: "g" }, { ing: "Fructose", qty: 30, unit: "g" }, { ing: "Water", qty: 30, unit: "ml" }, { ing: "Ice", qty: 250, unit: "g" }] },
+          { name: "22oz Blended", items: [{ ing: "Creamer Powder", qty: 40, unit: "g" }, { ing: "FC Milk Powder", qty: 30, unit: "g" }, { ing: "Blended Oreos", qty: 30, unit: "g" }, { ing: "Fructose", qty: 45, unit: "g" }, { ing: "Water", qty: 45, unit: "ml" }, { ing: "Ice", qty: 300, unit: "g" }] }
+        ],
+        note: "Top with whipped cream & crushed Oreos."
+      },
+      {
+        id: "scf",
+        code: "SCF",
+        name: "Salted Caramel Frappe",
+        category: "Frappe / Frost (Non-Coffee)",
+        tags: ["Blended"],
+        sizes: [
+          { name: "16oz Blended", items: [{ ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "FC Milk Powder", qty: 20, unit: "g" }, { ing: "Caramel Syrup", qty: 15, unit: "g" }, { ing: "Himalayan Salt", qty: 2, unit: "g" }, { ing: "Fructose", qty: 10, unit: "g" }, { ing: "Water", qty: 30, unit: "ml" }, { ing: "Ice", qty: 250, unit: "g" }] },
+          { name: "22oz Blended", items: [{ ing: "Creamer Powder", qty: 40, unit: "g" }, { ing: "FC Milk Powder", qty: 30, unit: "g" }, { ing: "Caramel Syrup", qty: 20, unit: "g" }, { ing: "Himalayan Salt", qty: 2.5, unit: "g" }, { ing: "Fructose", qty: 15, unit: "g" }, { ing: "Water", qty: 45, unit: "ml" }, { ing: "Ice", qty: 300, unit: "g" }] }
+        ],
+        note: "Caramel sauce sidings + top with whipped cream & caramel sauce."
+      },
+      {
+        id: "stf",
+        code: "STF",
+        name: "Strawberries and Cream",
+        category: "Frappe / Frost (Non-Coffee)",
+        tags: ["Blended"],
+        sizes: [
+          { name: "16oz Blended", items: [{ ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "FC Milk Powder", qty: 20, unit: "g" }, { ing: "Strawberry Syrup", qty: 10, unit: "g" }, { ing: "Fructose", qty: 30, unit: "g" }, { ing: "Water", qty: 15, unit: "ml" }, { ing: "Strawberry Jam Sidings", qty: 20, unit: "g" }, { ing: "Jam Toppings", qty: 10, unit: "g" }, { ing: "Ice", qty: 250, unit: "g" }] },
+          { name: "22oz Blended", items: [{ ing: "Creamer Powder", qty: 40, unit: "g" }, { ing: "FC Milk Powder", qty: 30, unit: "g" }, { ing: "Strawberry Syrup", qty: 15, unit: "g" }, { ing: "Fructose", qty: 35, unit: "g" }, { ing: "Water", qty: 30, unit: "ml" }, { ing: "Strawberry Jam Sidings", qty: 30, unit: "g" }, { ing: "Jam Toppings", qty: 10, unit: "g" }, { ing: "Ice", qty: 300, unit: "g" }] }
+        ],
+        note: "Top with whipped cream & strawberry jam."
+      },
+
+      // 6. YAKULT COOLERS, OAT LATTE & CACAO
+      {
+        id: "syk",
+        code: "SYK",
+        name: "Single Flavor Yakult Cooler",
+        category: "Yakult, Oat & Cacao",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Fruity Flavor Syrup", qty: 20, unit: "g" }, { ing: "Lemon Syrup", qty: 5, unit: "g" }, { ing: "CO2 Carbonated Water", qty: 100, unit: "ml" }, { ing: "Yakult Top", qty: "1 bottle", isText: true }] },
+          { name: "22oz Iced", items: [{ ing: "Fruity Flavor Syrup", qty: 30, unit: "g" }, { ing: "Lemon Syrup", qty: 10, unit: "g" }, { ing: "CO2 Carbonated Water", qty: 140, unit: "ml" }, { ing: "Yakult Top", qty: "1 bottle", isText: true }] }
+        ],
+        note: "Flavors: Strawberry, Lychee, Blueberry, Peach, Green Apple, Raspberry, Kyoho Grape."
+      },
+      {
+        id: "spy",
+        code: "SPY",
+        name: "Strawberry Peach Yakult",
+        category: "Yakult, Oat & Cacao",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Strawberry Syrup", qty: 20, unit: "g" }, { ing: "Peach Syrup", qty: 20, unit: "g" }, { ing: "Lemon Syrup", qty: 5, unit: "g" }, { ing: "CO2 Carbonated Water", qty: 100, unit: "ml" }, { ing: "Yakult Top", qty: "1 bottle", isText: true }] },
+          { name: "22oz Iced", items: [{ ing: "Strawberry Syrup", qty: 30, unit: "g" }, { ing: "Peach Syrup", qty: 30, unit: "g" }, { ing: "Lemon Syrup", qty: 10, unit: "g" }, { ing: "CO2 Carbonated Water", qty: 140, unit: "ml" }, { ing: "Yakult Top", qty: "1 bottle", isText: true }] }
+        ]
+      },
+      {
+        id: "fsy",
+        code: "FSY",
+        name: "Four Seasons Yakult",
+        category: "Yakult, Oat & Cacao",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Strawberry Syrup", qty: 20, unit: "g" }, { ing: "Peach Syrup", qty: 20, unit: "g" }, { ing: "Banana Syrup", qty: 10, unit: "g" }, { ing: "Lemon Syrup", qty: 5, unit: "g" }, { ing: "CO2 Carbonated Water", qty: 100, unit: "ml" }, { ing: "Yakult Top", qty: "1 bottle", isText: true }] },
+          { name: "22oz Iced", items: [{ ing: "Strawberry Syrup", qty: 30, unit: "g" }, { ing: "Peach Syrup", qty: 30, unit: "g" }, { ing: "Banana Syrup", qty: 15, unit: "g" }, { ing: "Lemon Syrup", qty: 10, unit: "g" }, { ing: "CO2 Carbonated Water", qty: 140, unit: "ml" }, { ing: "Yakult Top", qty: "1 bottle", isText: true }] }
+        ]
+      },
+      {
+        id: "oat",
+        code: "OAT",
+        name: "Oat Latte (Banana / Melon)",
+        category: "Yakult, Oat & Cacao",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Banana/Melon Syrup", qty: 20, unit: "g" }, { ing: "Sugar Syrup", qty: 15, unit: "g" }, { ing: "Oat Milk", qty: 180, unit: "ml" }] },
+          { name: "22oz Iced", items: [{ ing: "Banana/Melon Syrup", qty: 30, unit: "g" }, { ing: "Sugar Syrup", qty: 25, unit: "g" }, { ing: "Oat Milk", qty: 200, unit: "ml" }] }
+        ]
+      },
+      {
+        id: "sbo",
+        code: "SBO",
+        name: "Strawberry Banana Oat Latte",
+        category: "Yakult, Oat & Cacao",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Strawberry Syrup", qty: 10, unit: "g" }, { ing: "Banana Syrup", qty: 10, unit: "g" }, { ing: "Sugar Syrup", qty: 5, unit: "g" }, { ing: "Oat Milk", qty: 180, unit: "ml" }] },
+          { name: "22oz Iced", items: [{ ing: "Strawberry Syrup", qty: 15, unit: "g" }, { ing: "Banana Syrup", qty: 15, unit: "g" }, { ing: "Sugar Syrup", qty: 10, unit: "g" }, { ing: "Oat Milk", qty: 200, unit: "ml" }] }
+        ]
+      },
+      {
+        id: "hch",
+        code: "HCH",
+        name: "Hot Chocolate",
+        category: "Yakult, Oat & Cacao",
+        tags: ["Hot"],
+        sizes: [
+          { name: "12oz Hot", items: [{ ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "Cacao Powder", qty: 20, unit: "g" }, { ing: "Fructose", qty: 20, unit: "g" }, { ing: "Hot Water", qty: 200, unit: "ml" }] },
+          { name: "16oz Hot", items: [{ ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "Cacao Powder", qty: 25, unit: "g" }, { ing: "Fructose", qty: 25, unit: "g" }, { ing: "Hot Water", qty: 360, unit: "ml" }] }
+        ]
+      },
+      {
+        id: "ich",
+        code: "ICH",
+        name: "Icy Chocolate",
+        category: "Yakult, Oat & Cacao",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "Cacao Powder", qty: 20, unit: "g" }, { ing: "Fructose", qty: 20, unit: "g" }, { ing: "Water", qty: 180, unit: "ml" }] },
+          { name: "22oz Iced", items: [{ ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "Cacao Powder", qty: 25, unit: "g" }, { ing: "Fructose", qty: 30, unit: "g" }, { ing: "Water", qty: 200, unit: "ml" }] }
+        ]
+      },
+      {
+        id: "mtc",
+        code: "MTC",
+        name: "Minty Choco",
+        category: "Yakult, Oat & Cacao",
+        tags: ["Iced"],
+        sizes: [
+          { name: "16oz Iced", items: [{ ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "Cacao Powder", qty: 20, unit: "g" }, { ing: "Peppermint Syrup", qty: 25, unit: "g" }, { ing: "Fructose", qty: 20, unit: "g" }, { ing: "Water", qty: 180, unit: "ml" }] },
+          { name: "22oz Iced", items: [{ ing: "Creamer Powder", qty: 30, unit: "g" }, { ing: "Cacao Powder", qty: 25, unit: "g" }, { ing: "Peppermint Syrup", qty: 30, unit: "g" }, { ing: "Fructose", qty: 30, unit: "g" }, { ing: "Water", qty: 200, unit: "ml" }] }
+        ]
+      }
+    ];
+
+    /* ==========================================================================
+       APPLICATION STATE MANAGEMENT
+       ========================================================================== */
+    let activeCategory = "All";
+    let activeSearchQuery = "";
+    let currentMultiplier = 1;
+    let selectedSizeIndices = {}; // Stores size choice per recipe ID
+    let pinnedRecipeIds = [];
+
+    // LocalStorage Keys
+    const THEME_KEY = "barista_app_theme";
+    const PINNED_KEY = "barista_app_pinned";
+
+    /* ==========================================================================
+       DOM ELEMENTS
+       ========================================================================== */
+    const recipeGrid = document.getElementById("recipeGrid");
+    const categoryNav = document.getElementById("categoryNav");
+    const searchInput = document.getElementById("searchInput");
+    const clearSearchBtn = document.getElementById("clearSearchBtn");
+    const activeCategoryTitle = document.getElementById("activeCategoryTitle");
+    const themeToggleBtn = document.getElementById("themeToggleBtn");
+    const themeLabel = document.getElementById("themeLabel");
+    const toast = document.getElementById("toast");
+    const toastMsg = document.getElementById("toastMsg");
+
+    /* ==========================================================================
+       INIT APP
+       ========================================================================== */
+    window.addEventListener("DOMContentLoaded", () => {
+      initTheme();
+      loadPinnedRecipes();
+      renderCategoryNav();
+      renderRecipes();
+      setupEventListeners();
+    });
+
+    /* ==========================================================================
+       THEME CONTROLLER
+       ========================================================================== */
+    function initTheme() {
+      const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+      themeLabel.textContent = savedTheme === "dark" ? "Dark" : "Light";
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute("data-theme");
+      const newTheme = currentTheme === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem(THEME_KEY, newTheme);
+      themeLabel.textContent = newTheme === "dark" ? "Dark" : "Light";
+      showToast(`Switched to ${newTheme} theme`);
+    }
+
+    /* ==========================================================================
+       PINNED / FAVORITES MANAGEMENT
+       ========================================================================== */
+    function loadPinnedRecipes() {
+      try {
+        const saved = localStorage.getItem(PINNED_KEY);
+        pinnedRecipeIds = saved ? JSON.parse(saved) : [];
+      } catch (e) {
+        pinnedRecipeIds = [];
+      }
+    }
+
+    function togglePin(recipeId) {
+      if (pinnedRecipeIds.includes(recipeId)) {
+        pinnedRecipeIds = pinnedRecipeIds.filter(id => id !== recipeId);
+        showToast("Removed from favorites");
+      } else {
+        pinnedRecipeIds.push(recipeId);
+        showToast("Pinned to favorites");
+      }
+      localStorage.setItem(PINNED_KEY, JSON.stringify(pinnedRecipeIds));
+      renderCategoryNav();
+      renderRecipes();
+    }
+
+    /* ==========================================================================
+       CATEGORY NAVIGATION
+       ========================================================================== */
+    function getCategories() {
+      const categories = ["All", "Favorites"];
+      RECIPE_DATA.forEach(r => {
+        if (!categories.includes(r.category)) {
+          categories.push(r.category);
+        }
+      });
+      return categories;
+    }
+
+    function renderCategoryNav() {
+      const categories = getCategories();
+      categoryNav.innerHTML = "";
+
+      categories.forEach(cat => {
+        let count = 0;
+        if (cat === "All") count = RECIPE_DATA.length;
+        else if (cat === "Favorites") count = pinnedRecipeIds.length;
+        else count = RECIPE_DATA.filter(r => r.category === cat).length;
+
+        const btn = document.createElement("button");
+        btn.className = `cat-btn ${activeCategory === cat ? "active" : ""}`;
+        btn.innerHTML = `${cat} <span class="cat-badge">${count}</span>`;
+        btn.addEventListener("click", () => {
+          activeCategory = cat;
+          activeCategoryTitle.textContent = cat === "Favorites" ? "Pinned Recipes" : (cat === "All" ? "All Recipes" : cat);
+          renderCategoryNav();
+          renderRecipes();
+        });
+
+        categoryNav.appendChild(btn);
+      });
+    }
+
+    /* ==========================================================================
+       RECIPE CARD RENDER ENGINE
+       ========================================================================== */
+    function filterRecipes() {
+      return RECIPE_DATA.filter(recipe => {
+        // Category Filter
+        if (activeCategory === "Favorites") {
+          if (!pinnedRecipeIds.includes(recipe.id)) return false;
+        } else if (activeCategory !== "All" && recipe.category !== activeCategory) {
+          return false;
+        }
+
+        // Search Filter (Name, Drink Code, Variants)
+        if (activeSearchQuery.trim() !== "") {
+          const query = activeSearchQuery.toLowerCase();
+          const matchName = recipe.name.toLowerCase().includes(query);
+          const matchCode = recipe.code.toLowerCase().includes(query);
+          const matchVar = recipe.variants ? recipe.variants.toLowerCase().includes(query) : false;
+          return matchName || matchCode || matchVar;
+        }
+
+        return true;
+      });
+    }
+
+    function renderRecipes() {
+      const filtered = filterRecipes();
+      recipeGrid.innerHTML = "";
+
+      if (filtered.length === 0) {
+        recipeGrid.innerHTML = `
+          <div class="empty-state">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M11,15H13V17H11V15M11,7H13V13H11V7M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z"/></svg>
+            <p>No barista recipes found matching your criteria.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Sort Pinned to top if viewing All or Specific Category
+      const sorted = [...filtered].sort((a, b) => {
+        const aPinned = pinnedRecipeIds.includes(a.id);
+        const bPinned = pinnedRecipeIds.includes(b.id);
+        if (aPinned && !bPinned) return -1;
+        if (!aPinned && bPinned) return 1;
+        return 0;
+      });
+
+      sorted.forEach(recipe => {
+        const isPinned = pinnedRecipeIds.includes(recipe.id);
+        const activeSizeIdx = selectedSizeIndices[recipe.id] !== undefined ? selectedSizeIndices[recipe.id] : 0;
+        const currentSizeObj = recipe.sizes[activeSizeIdx] || recipe.sizes[0];
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        // Tags HTML
+        const tagsHtml = recipe.tags.map(t => {
+          let tagClass = "tag-iced";
+          if (t.toLowerCase() === "hot") tagClass = "tag-hot";
+          if (t.toLowerCase() === "blended") tagClass = "tag-blended";
+          return `<span class="tag ${tagClass}">${t}</span>`;
+        }).join("");
+
+        // Size Selector Buttons HTML
+        const sizesHtml = recipe.sizes.map((sz, idx) => `
+          <button class="size-btn ${idx === activeSizeIdx ? 'active' : ''}" data-recipe-id="${recipe.id}" data-size-idx="${idx}">
+            ${sz.name}
+          </button>
+        `).join("");
+
+        // Ingredients Items HTML
+        const ingredientsHtml = currentSizeObj.items.map(item => {
+          let displayVal = item.qty;
+          if (!item.isText && typeof item.qty === 'number') {
+            const calculated = item.qty * currentMultiplier;
+            // Handle decimal precision cleanly
+            const formatted = Number.isInteger(calculated) ? calculated : calculated.toFixed(1);
+            displayVal = `${formatted}${item.unit ? ' ' + item.unit : ''}`;
+          }
+          return `
+            <li>
+              <span class="ing-name">${item.ing}</span>
+              <span class="ing-val">${displayVal}</span>
+            </li>
+          `;
+        }).join("");
+
+        card.innerHTML = `
+          <div>
+            <div class="card-header">
+              <div class="drink-title-group">
+                <span class="drink-title">${recipe.name}</span>
+                <span class="drink-code-badge">${recipe.code}</span>
+              </div>
+              <div class="card-actions">
+                <button class="pin-btn ${isPinned ? 'pinned' : ''}" title="Pin/Favorite Recipe" data-pin-id="${recipe.id}">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M16,12V4H17V2H7V4H8V12L6,14V16H11.5V22H12.5V16H18V14L16,12Z"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="tag-container">
+              ${tagsHtml}
+            </div>
+
+            <div class="size-selector">
+              ${sizesHtml}
+            </div>
+
+            <div class="ingredients-box">
+              <ul class="ingredients-list">
+                ${ingredientsHtml}
+              </ul>
+            </div>
+          </div>
+
+          ${recipe.note ? `<div class="notes-box">💡 ${recipe.note}</div>` : ''}
+        `;
+
+        recipeGrid.appendChild(card);
+      });
+
+      attachCardEventListeners();
+    }
+
+    /* ==========================================================================
+       EVENT LISTENERS & DELEGATION
+       ========================================================================== */
+    function attachCardEventListeners() {
+      // Pin / Favorite Buttons
+      document.querySelectorAll(".pin-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const id = btn.getAttribute("data-pin-id");
+          togglePin(id);
+        });
+      });
+
+      // Size Switching Buttons
+      document.querySelectorAll(".size-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const recipeId = btn.getAttribute("data-recipe-id");
+          const sizeIdx = parseInt(btn.getAttribute("data-size-idx"), 10);
+          selectedSizeIndices[recipeId] = sizeIdx;
+          renderRecipes();
+        });
+      });
+    }
+
+    function setupEventListeners() {
+      // Search Input
+      searchInput.addEventListener("input", (e) => {
+        activeSearchQuery = e.target.value;
+        if (activeSearchQuery.length > 0) {
+          clearSearchBtn.classList.add("active");
+        } else {
+          clearSearchBtn.classList.remove("active");
+        }
+        renderRecipes();
+      });
+
+      clearSearchBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        activeSearchQuery = "";
+        clearSearchBtn.classList.remove("active");
+        renderRecipes();
+      });
+
+      // Batch Multiplier Buttons
+      document.querySelectorAll(".batch-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".batch-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentMultiplier = parseInt(btn.getAttribute("data-multiplier"), 10);
+          showToast(`Batch multiplier set to x${currentMultiplier}`);
+          renderRecipes();
+        });
+      });
+
+      // Theme Toggle
+      themeToggleBtn.addEventListener("click", toggleTheme);
+    }
+
+    /* ==========================================================================
+       UTILITIES & TOAST NOTIFICATION
+       ========================================================================== */
+    let toastTimeout;
+    function showToast(msg) {
+      toastMsg.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
